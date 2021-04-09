@@ -1,0 +1,382 @@
+{% extends "base1.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<!-- <br>
+     {% for product in products %}
+     <div class="content-crumb-div" style="padding-left: 300px;">
+       
+        <a href={%url 'home'%}><h6>Home</a> / <a href={%url 'healthcare'%}>Healthcare Products</a> /Covid</h6>
+        
+     </div>
+     {%endfor%}
+      <br><br> -->
+      <br>
+     
+ <div class="content-crumb-div" style="padding-left: 300px;">
+    
+   
+    <a href={% url 'home'%}><h6>Home</a>/Ayurvedic</a>
+       </h6>
+         
+    
+        
+
+</div>
+
+<br><br>
+<div class="row">
+ <section id="gallery">
+     
+<div class="container-fluid">
+    <form method="POST" action="{% url 'ayush' %}">
+        {% csrf_token %}
+        <div class="row justify-content-start">
+            <div class="col-lg-3 mb-3">
+        <div class="card border border-white rounded-0" style="width: 18rem;" style="background-color: #fff">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+    <center><div>
+        <center> <input type="radio" id="searchbyabrand" name="SearchBy" value="abrand_name">
+                    <label for="searchbyabrand"><h6>Search By Brand</h6></label></center>
+                </div>
+             <div>
+                <center> <div id="searchByaBrandField"><input type="text" name="txtSearchaBrand"  placeholder="Brand Name To Search"></div>
+            </div></center>
+    <br>
+        <div>
+            <center> <input type="radio" id="searchbyaname" name="SearchBy" value="aproduct_name">
+            <label for="searchbyaname"><h6>Search By Product Name</h6></label></center>
+            </div>
+                <div>
+                    <center> <div id="searchByaNameField"><input type="text" name="txtSearchaName"  placeholder="Name To Search"></div> </center>
+            </div>
+        <br>
+        <!-- <ul class="navbar-nav mr-sm-0"> -->
+           <center> <h6>Categories</h6>
+<div class="form-check">
+    <center><input class="form-check-input" type="checkbox" name="Category" id="exampleRadios1" value="option1"></center>
+  <label class="form-check-label" for="exampleRadios1">
+    Ayurvedic
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" name="Category" id="exampleRadios2" value="option2">
+  <label class="form-check-label" for="exampleRadios2">
+    Unani
+  </label>
+</div>
+            <div class="form-check">
+  <input class="form-check-input" type="checkbox" name="Category" id="exampleRadios2" value="option3">
+  <label class="form-check-label" for="exampleRadios2">
+    Siddha
+  </label>
+            </div></center>
+        <center><br>
+            <div>
+                <center> <input type="radio" id="searchbyname" name="SearchBy" value="product_prices">
+                <label for="searchbyprice"><h6>Price</h6></label></center>
+                </div>
+                <div class="list-group list-group-flush" name="SearchPrice">
+                    <li class="list-group-item">
+                        <input type="range" min="0" max="2000" oninput="minaPrice.value = this.value"/>
+                    </li>
+                    <li class="list-group-item">
+                        Min: <input type="number" onkeyup="rangeInput.value=this.value" id="minaPrice" min="0" max="2000" name="minaPrice"/>
+                    </li>
+                </div>
+            <div class="list-group list-group-flush" name="SearchPrice">
+                <li class="list-group-item">
+                    <input type="range" min="0" max="2000" oninput="maxaPrice.value = this.value"/>
+                </li>
+                <li class="list-group-item">
+                    Max: <input type="number" onkeyup="rangeInput.value=this.value" id="maxaPrice" min="0" max="2000" name="maxaPrice"/>
+                </li>
+            </div>
+        
+        <!-- <div>
+            <center> <input type="radio" id="searchbyname" name="rbtnSearchBy" value="product_price">
+            <label for="searchbyprice">Price From</label></center>
+            </div>
+                <div>
+                    <center> <div id="searchByNameField"><input type="text" name="txtSearchPrice"  placeholder="Price From"></div> </center>
+            </div>
+        
+               <center>To</center> 
+                <div>
+                    <center> <div id="searchByNameField"><input type="text" name="txtSearchPriceto"  placeholder="To"></div> </center>
+            </div>
+        <br> -->
+<br>
+<!-- <h4>Categories</h4>
+<div>
+  <input type="radio" name="rbtnSearchBy" id="exampleRadios1" value="option1">
+  <label class="form-check-label" for="exampleRadios1">
+    Education
+  </label>
+</div>
+<div>
+  <input type="radio" name="rbtnSearchBy" id="exampleRadios2" value="option2">
+  <label class="form-check-label" for="exampleRadios2">
+    Motivatinal
+  </label>
+</div>
+            <div>
+  <input type="radio" name="rbtnSearchBy" id="exampleRadios2" value="option2">
+  <label class="form-check-label" for="exampleRadios2">
+    Fiction
+  </label>
+            </div>
+            <div>
+  <input type="radio" name="rbtnSearchBy" id="exampleRadios2" value="option2">
+  <label class="form-check-label" for="exampleRadios2">
+    Crime/Mystery
+  </label>
+</div>
+<div>
+    <input type="radio" name="rbtnSearchBy" id="exampleRadios2" value="option2">
+    <label class="form-check-label" for="exampleRadios2">
+      Biography
+    </label>
+  </div> -->
+<br>
+         <div>
+                    <input type="submit" value="Find" class="btn btn-secondary">
+                </div>
+    </center>
+      
+  </ul>
+
+</div></center>
+       </div>
+            <div class="col-lg-9 mb-9">
+             <div class="card border border-white rounded-0" style="width: 60rem;" style="background-color: #fff">
+                 <br>
+            <div class="container-fluid">
+    {% if ayproducts %}
+                 <div class="row justify-content-start">
+    {% for products in ayproducts %}
+
+<div class="col-lg-4 mb-4" style="float:left">
+                    <div class="card" style="height:405px;width: 15rem;">
+                       <img class="card-img-top" src="{{ products.product_frontpage.url }}" alt=" " style="height:250px; width: 14rem;"> 
+                        <div class="card-body">
+                            <h6 class="card-title" style="text-align:center" id="namepr{{products.id}}">{{ products.product_name }}</h6>
+                            <h6 class="card-title" style="text-align:center">{{ products.brand_name }}</h6>
+                            <h6 class="price" id="pricepr{{products.id}}" style="text-align:center">₹{{products.product_price}}</h6>
+                            <!-- <div  style="margin-left: 2.5rem !important"> -->
+                                <div>
+                           <center><a class="btn btn-primary mx-2" id="qv{{products.id}}" href="{%url 'aproducts' products.id %}">
+                                    Visit</a></div> </center>
+                                  <br>  
+                               
+                            </div>
+                        <!-- </div> -->
+                    </div>
+</div>
+
+    {% endfor %}
+                     </div>
+    {% endif %}
+        </div>
+                 <br>
+            </div>
+            <br>
+            <br>
+        </div>
+    </div>
+        </form>
+</div>
+      </section>
+    </div>
+{% endblock content %}
+
+{% block js %}
+<script>
+    
+    $(document).ready(function () {
+        $('input[name="SearchBy"]').change(function () {
+            if ($('#searchbyname').prop('checked')) {
+                $('input[name="txtSearchName"]').attr("readonly", false);
+                $('input[name="txtSearchName"]').focus();
+                $('input[name="txtSearchBrand"]').attr("readonly", true);
+            }
+
+            
+        });
+    });
+    $(document).ready(function () {
+        $('input[name="SearchBy"]').change(function () {
+            if ($('#searchbybrand').prop('checked')) {
+                $('input[name="txtSearchBrand"]').attr("readonly", false);
+                $('input[name="txtSearchBrand"]').focus();
+                $('input[name="txtSearchName"]').attr("readonly", true);
+            }
+
+            
+        });
+    });
+    $(document).ready(function () {
+        $('input[name="rbtnSearchBy"]').change(function () {
+            if ($('#searchbyprice').prop('checked')) {
+                $('input[name="SearchPrice"]').attr("readonly", false);
+                $('input[name="SearchPrice"]').focus();
+                $('input[name="txtSearchName"]').attr("readonly", true);
+            }
+
+            
+        });
+    });
+
+    $(document).ready(function () {
+        $('.product_price').click(function () {
+            $('.product_price:checked').each(function () {
+               
+                $('input[name="exampleRadios1"]').focus();
+               
+            });
+
+            
+        });
+    });
+    
+
+
+    console.log("Its Working");
+
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+        updateCart(cart);
+    }
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+        document.getElementById('cart').innerHTML = Object.keys(cart).length;
+        console.log('parsed');
+        updateCart(cart);
+    }
+
+    //$('.cart').click(function () {
+        $('.divpr').on('click', 'a.cart', function(){
+        console.log('Clicked');
+        var idStr = this.id.toString();
+        console.log(idStr);
+
+        if (cart[idStr] != undefined) {
+            // qty = cart[idStr][0] + 1;
+            //name = "Name";
+            //var num = parseFloat( document.getElementById('price'+idStr).innerHTML);
+            //console.log("Net Price : "+num);
+            //price = document.getElementById('price'+idStr).innerHTML;
+            cart[idStr][0] += 1;
+            //cart[idStr][2] = price;
+            //cart[idStr] = [qty,name,price];
+        }
+        else {
+            qty = 1;
+            name = document.getElementById('name' + idStr).innerHTML.trim();
+            //var num = parseFloat( document.getElementById('price'+idStr).innerHTML);
+            //console.log("Net Price : "+num);
+            price = document.getElementById('price' +  idStr).innerHTML;
+            cart[idStr] = [qty,name,price];
+            //cart[idStr][0] = qty;
+        }
+        console.log(cart);
+
+        updateCart(cart);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        document.getElementById('cart').innerHTML = Object.keys(cart).length;
+    });
+
+    /*$('#pop').popover();
+        document.getElementById('pop').setAttribute('data-content', '<h5>Manage Your Shopping Cart Here...</h5>');
+    */
+   // updatePopover(cart);
+    function updatePopover(cart) {
+        console.log("updating popover...");
+        var popStr = "";
+        popStr = popStr + "<h5>Your Shopping Cart</h5> <div class='mx-2 my-2'>";
+        var i = 1;
+        for (var item in cart) {
+            popStr = popStr + "<b>" + i +"</b>. " + document.getElementById('name' + item).innerHTML + " Qty : " + cart[item][0] + "<br>";
+            i = i + 1;
+        }
+        
+        popStr = popStr + "</div> <a href='/books/checkout' class='btn btn-primary' id='checkout'>Checkout</a> <a class='btn btn-secondary' id='clearcart' onClick='clearCart()'>Clear</a>";
+
+        //popStr = popStr + "";
+
+        console.log(popStr);
+        document.getElementById('pop').setAttribute('data-content', popStr);
+        $('#pop').popover('show');
+    }
+
+    function clearCart(){
+        console.log('Clearing cart...');
+        cart = JSON.parse(localStorage.getItem('cart'));
+        for(var item in cart){
+            document.getElementById('div'+item).innerHTML = '<a id= "' + item + '" class="btn btn-secondary cart">Add To Cart</a>';
+        }
+        localStorage.clear();
+        cart = {};
+        updateCart(cart);
+    }
+
+    function updateCart(cart) {
+        for (var item in cart) {
+            document.getElementById('div' + item).innerHTML = "<a id='minus" + item + "' class='btn btn-primary minus'>-</a> <span id='val" + item + "''>" + cart[item][0] + "</span> <a id='plus" + item + "' class='btn btn-primary plus'> + </a>";
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        document.getElementById('cart').innerHTML = Object.keys(cart).length;
+        updatePopover(cart);
+    }
+
+    $('.divpr').on('click', 'a.minus', function () {
+        console.log('Minus Clicked');
+        a = this.id.slice(7, );
+        cart['pr' + a][0] = cart['pr' + a][0] - 1;
+        cart['pr' + a][0] = Math.max(0, cart['pr' + a][0]);
+        //net_price = cart['pr' + a][0] * parseFloat(document.getElementById('pricepr' + a));
+        //cart['pr' + a][2] = net_price;  
+        /*if(cart['pr'+a]==0){
+            delete cart['pr'+a];
+        }*/
+        console.log(cart);
+        document.getElementById('valpr' + a).innerHTML = cart['pr' + a][0];
+        updateCart(cart);
+    }
+    );
+
+    $('.divpr').on('click', 'a.plus', function () {
+        console.log('Plus Clicked');
+        a = this.id.slice(6,);
+        cart['pr' + a][0] = cart['pr' + a][0] + 1;
+
+        console.log(cart);
+        document.getElementById('valpr' + a).innerHTML = cart['pr' + a][0];
+        updateCart(cart);
+    }
+    );
+
+
+   //updatePopover(cart);
+   /* function updatePopover(cart) {
+        console.log("updating popover...");
+        var popStr = "";
+        popStr = popStr + "<h5>Your Shopping Cart</h5> <div class='mx-2 my-2'>";
+        var i = 1;
+        for (var item in cart) {
+            popStr = popStr + "<b>" + i +"</b>. " + document.getElementById('name' + item).innerHTML + " Qty : " + cart[item] + "<br>";
+            i = i + 1;
+        }
+        popStr = popStr + "</div>";
+        console.log(popStr);
+        document.getElementById('pop').setAttribute('data-content', popStr);
+        $('#pop').popover('show');
+    }*/
+
+    $('#clearcart').on('click', function(){
+        clearCart();
+    })
+
+</script>
+{% endblock %}

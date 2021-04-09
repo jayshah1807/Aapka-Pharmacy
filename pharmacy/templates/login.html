@@ -1,0 +1,91 @@
+{% load static %}
+{%load socialaccount%}
+{%providers_media_js%}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6 ielt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7 ielt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Login</title>
+<link rel="stylesheet" type="text/css" href="{%  static 'style2.css' %}" />
+<!-- <script language ="javascript" type="text/javascript">
+
+function login()
+	{
+		var email = document.getElementById("email").value;
+		var pwd = document.getElementById("password").value;
+		var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if(email =='')
+		{
+			alert("please enter your email.");
+		}
+		else if(pwd=='')
+		{
+        	alert("enter the password");
+		}
+		else if(!filter.test(email))
+		{
+			alert("Enter valid email id.");
+		}
+		else if(pwd.length < 6 && pwd.length > 20)
+		{
+			alert("Password min and max length is 20.");
+		}
+		else
+		{
+	alert('Thank You' +  ' ' + email +' '+ 'for Login & You are Redirecting to Aapka Pharmacy');
+  //Redirecting to other page or webste code or you can set your own html page.
+			}
+	}
+  </script> -->
+</head>
+<body>
+<div class="container">
+  <section id="content">
+    <form action="login" method="POST">
+        {% csrf_token %}
+      <h1>Login Form</h1>
+      <div>
+        <input type="text" placeholder="Username" required="" name="username" />
+      </div>
+      <div>
+        <input type="password" placeholder="Password" required="" name="password" />
+      </div>
+      <div>
+        <input type="submit" value="Log in" style="box-shadow: 0 4px 8px 0;" onClick="login()" />
+        <a href={% url 'password_reset' %}>Lost your password?</a>
+        <a href={% url 'register' %}>Register</a>
+      </div><br>
+	  <!-- <center style="padding-left: 40px;">or</center><br> -->
+	  ________________________________________<br><br>
+	  <!-- <i class="fab fa-google"></i> -->
+    </form><!-- form -->
+	 <!-- <a href="{% provider_login_url "google" method="js_sdk" %}"> <input type="submit" value="Log in with Gmail" style="box-shadow: 0 4px 8px 0; width:350px;height:30px " /></a> -->
+     <center><div class="row">
+		<div class="col-md-3" style="padding-left:60px; ">
+		  <a class="btn btn-outline-dark" href={% provider_login_url "google" method="js_sdk"%} role="button" style="text-transform:none; width: 300px;">
+			<img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+			Login with Google
+		  </a>
+		</div>
+	  </div></center>
+	  <link   rel="stylesheet" 
+	  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+	  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+	  crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+	  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
+	  crossorigin="anonymous">
+</script>
+		<!-- {% for message in messages %}
+		<h3>{{message}} </h3>
+		{% endfor %} -->
+	</div>
+  </section><!-- content -->
+</div><!-- container -->
+
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+{% extends "base1.html" %}
+{%load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<section id="gallery">
+    {% for product in products %}
+    <div class="content-crumb-div" style="padding-left: 300px;">
+        <a href={%url 'home'%}><h6>Home</a> / <a href={%url 'healthcare'%}>Healthcare Products</a> /{{product.name}}</h6>
+     </div>
+     {%endfor%}
+    <br>
+<br>
+       <div class="container" style="background-color: #fff">
+           <br>
+           <br>
+           <section>
+            <div class="row justify-content-start">
+                <div class="col-lg-3 mb-3">
+                    <div class="card" style="height:320px">
+                        <img class="card-img-top" src="{{ hproduct.product_frontpage.url }}" alt=" " style="height:320px">
+
+                    </div>
+                    </div>
+                <div class="col-lg-9 mb-9">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ hproduct.product_name }}</h4>
+                            <br>
+                            
+                            <h5> by {{ hproduct.brand_name }}</h5>
+                            <br>
+                            
+                            <h6>Rs. {{ hproduct.product_price }}</h6>
+                            <br>
+                            
+                    <a href="{% url 'addtocart' hproduct.id %}" class="btn btn-outline-dark btn-sm ">Add to cart</a>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+               </section>
+           <section>
+               <h5>Product Description</h5>
+               <br>
+               <div style="border-bottom: 1px solid black">
+               </div>
+               <div>
+                   <br>
+                   <p>{{ hproduct.product_description }}
+                    </p>
+                   <br>
+                   <br>
+               </div>
+               <h5>Product Details</h5>
+               <br>
+               <div style="border-bottom: 1px solid black">
+               </div>
+               <div class="container">
+                   <br>
+                   <div class="row justify-content-start">
+                <div class="col-lg-6 mb-6">
+                    <h6>Title : {{ hproduct.product_name }}</h6>
+                    <h6>Author : {{ hproduct.brand_name }}</h6>
+                   
+                </div>
+                       <div class="col-lg-6 mb-6">
+                           <h6>PNumber : {{ hproduct.product_number }}</h6>
+                        
+                       </div>
+                   </div>
+               </div>
+               <br>
+               <br>
+           </section>
+       </div>
+       <br><br><br>
+       <div class="row justify-content-start">
+       <div class="col-lg-6 mb-6" style="padding-left: 100px;">
+        <h2 class="subtitle">Reviews</h2>
+
+        <div class="reviews-wrapper">
+            {% for r in review %}
+                <div class="notification space-below">
+                    <p>
+                        <strong>Date: </strong>{{ r.create_at|date:"Y-m-d" }},
+                        <strong>Stars: </strong>{{ r.rate }}<br>
+                        <strong>Username: </strong> {{r.user}}
+                    </p>
+
+                    <b> {{r.subject}}</b><br>
+                    {{ r.comment }}
+                </div>
+            {% empty %}
+                <div class="notification space-below">
+                    No reviews yet...
+                </div>
+            {% endfor %}
+        </div>
+    
+
+        <div class="notification space-below">
+            {% if request.user.is_authenticated %}
+                <form method="POST" class="rating-form ">
+                    {% csrf_token %}
+
+                    
+                            <!-- <img class="disputelab_logo" src="https://chargebacks911.com/wp-content/uploads/2017/06/disputelab_logo.svg"/> -->
+                            
+                                <fieldset class="form-group">
+                                  
+                                  <legend class="form-legend">Rating:</legend>
+                                  
+                                  <div class="form-item">
+                                    
+                                    <input id="rating-5" name="rate" type="radio" value="5" />
+                                    <label for="rating-5" data-value="5">
+                                      <span class="rating-star">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star"></i>
+                                      </span>
+                                      <span class="ir">5</span>
+                                    </label>
+                                    <input id="rating-4" name="rate" type="radio" value="4" />
+                                    <label for="rating-4" data-value="4">
+                                      <span class="rating-star">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star"></i>
+                                      </span>
+                                      <span class="ir">4</span>
+                                    </label>
+                                    <input id="rating-3" name="rate" type="radio" value="3" />
+                                    <label for="rating-3" data-value="3">
+                                      <span class="rating-star">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star"></i>
+                                      </span>
+                                      <span class="ir">3</span>
+                                    </label>
+                                    <input id="rating-2" name="rate" type="radio" value="2" />
+                                    <label for="rating-2" data-value="2">
+                                      <span class="rating-star">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star"></i>
+                                      </span>
+                                      <span class="ir">2</span>
+                                    </label>
+                                    <input id="rating-1" name="rate" type="radio" value="1" />
+                                    <label for="rating-1" data-value="1">
+                                      <span class="rating-star">
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star"></i>
+                                      </span>
+                                      <span class="ir">1</span>
+                                    </label>
+                                    
+                                    <div class="form-action">
+                                      <input class="btn-reset" type="reset" value="Reset" />   
+                                    </div>
+                              
+                                    
+                                    
+                                  </div>
+                                  
+                                </fieldset>
+                             
+
+                            <style>
+                                
+ 
+ .rating-form {
+	 margin-top: 20px;
+}
+ .rating-form .form-group {
+	 position: relative;
+	 border: 0;
+}
+ .rating-form .form-legend {
+	 display: none;
+	 margin: 0;
+	 padding: 0;
+	 font-size: 20px;
+	 font-size: 1rem;
+}
+ .rating-form .form-item {
+	 position: relative;
+	 margin: auto;
+	 width: 300px;
+	 text-align: center;
+	 direction: rtl;
+}
+ .rating-form .form-legend + .form-item {
+	 padding-top: 10px;
+}
+ .rating-form input[type='radio'] {
+	 position: absolute;
+	 left: -9999px;
+}
+ .rating-form label {
+	 display: inline-block;
+	 cursor: pointer;
+}
+ .rating-form .rating-star {
+	 display: inline-block;
+	 position: relative;
+}
+ .rating-form input[type='radio'] + label:before {
+	 content: attr(data-value);
+	 position: absolute;
+	 right: 30px;
+	 top: 83px;
+	 font-size: 30px;
+	 font-size: 3rem;
+	 opacity: 0;
+	 direction: ltr;
+	 -webkit-transition: all .2s ease-in-out;
+	 -moz-transition: all .2s ease-in-out;
+	 -o-transition: all .2s ease-in-out;
+	 transition: all .2s ease-in-out;
+}
+ .rating-form input[type='radio']:checked + label:before {
+	 right: 25px;
+	 opacity: 1;
+}
+ .rating-form input[type='radio'] + label:after {
+	 content: "/ 5";
+	 position: absolute;
+	 right: 5px;
+	 top: 96px;
+	 font-size: 16px;
+	 font-size: 1.6rem;
+	 opacity: 0;
+	 direction: ltr;
+	 -webkit-transition: all .2s ease-in-out;
+	 -moz-transition: all .2s ease-in-out;
+	 -o-transition: all .2s ease-in-out;
+	 transition: all .2s ease-in-out;
+}
+ .rating-form input[type='radio']:checked + label:after {
+	 opacity: 1;
+}
+ .rating-form label .fa {
+	 font-size: 20px;
+	 font-size: 2rem;
+	 line-height: 60px;
+	 -webkit-transition: all .2s ease-in-out;
+	 -moz-transition: all .2s ease-in-out;
+	 -o-transition: all .2s ease-in-out;
+	 transition: all .2s ease-in-out;
+}
+ .rating-form label:hover .fa-star-o, .rating-form label:focus .fa-star-o, .rating-form label:hover ~ label .fa-star-o, .rating-form label:focus ~ label .fa-star-o, .rating-form input[type='radio']:checked ~ label .fa-star-o {
+	 opacity: 0;
+}
+ .rating-form label .fa-star {
+	 position: absolute;
+	 left: 0;
+	 top: 0;
+	 opacity: 0;
+}
+ .rating-form label:hover .fa-star, .rating-form label:focus .fa-star, .rating-form label:hover ~ label .fa-star, .rating-form label:focus ~ label .fa-star, .rating-form input[type='radio']:checked ~ label .fa-star {
+	 opacity: 1;
+}
+ .rating-form input[type='radio']:checked ~ label .fa-star {
+	 color: gold;
+}
+ .rating-form .ir {
+	 position: absolute;
+	 left: -9999px;
+}
+ .rating-form .form-action {
+	 opacity: 0;
+	 position: absolute;
+	 left: 120px;
+	 bottom: -20px;
+	 -webkit-transition: all .2s ease-in-out;
+	 -moz-transition: all .2s ease-in-out;
+	 -o-transition: all .2s ease-in-out;
+	 transition: all .2s ease-in-out;
+}
+ .rating-form input[type='radio']:checked ~ .form-action {
+	 cursor: pointer;
+	 opacity: 1;
+}
+ .rating-form .btn-reset {
+	 display: inline-block;
+	 margin: 0;
+	 padding: 4px 10px;
+	 border: 0;
+	 font-size: 10px;
+	 font-size: 1rem;
+	 background: #fff;
+	 color: #333;
+	 cursor: auto;
+	 border-radius: 5px;
+	 outline: 0;
+	 -webkit-transition: all .2s ease-in-out;
+	 -moz-transition: all .2s ease-in-out;
+	 -o-transition: all .2s ease-in-out;
+	 transition: all .2s ease-in-out;
+}
+ .rating-form .btn-reset:hover, .rating-form .btn-reset:focus {
+	 background: gold;
+}
+ .rating-form input[type='radio']:checked ~ .form-action .btn-reset {
+	 cursor: pointer;
+}
+ 
+ 
+                            </style>
+    
+  
+                            
+                            <!-- <div class="select">
+                                <select name="stars">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3" selected>3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div> -->
+                        </div>
+                    </div>
+
+                    <div class="field" style="padding-left: 350px;">
+                        <label>Subject</label>
+
+                        <div class="control">
+                            <textarea class="textfield" name="subject" style="height: 30px; width:300px"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="field" style="padding-left: 350px;">
+                        <label>Content</label>
+
+                        <div class="control">
+                            <textarea class="textarea" name="comment" style="width:300px; height:70px"></textarea>
+                        </div>
+                    </div>
+
+                   
+
+
+                    <div class="field" style="padding-left: 350px;">
+                        <div class="control">
+                            <button class="button is-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            {% else %}
+                <p>Please sign in to add review!</p>
+            {% endif %}
+        </div>
+    </div>
+  
+                    </div>
+
+            </div>
+    <br>
+    
+<br>
+    
+{%endblock%}

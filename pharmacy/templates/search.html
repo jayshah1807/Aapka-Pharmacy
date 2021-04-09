@@ -1,0 +1,70 @@
+{% extends 'base1.html' %}
+{{error}}
+
+
+
+{% block content %}
+<div class="content-crumb-div" style="padding-left: 300px;">
+    <a href={%url 'home'%}><h6>Home</a> / Search</h6>
+ </div>
+  
+</div>
+<div class="col-lg-9 mb-9" style="padding-left: 260px; padding-top:50px">
+ <div class="card border border-white rounded-0" style="width: 60rem;" style="background-color: #fff">
+     <br>
+{% if products1%}
+<div class="row justify-content-start">
+<center><h1>Search results: </h1></center>
+{% for  products in products1 %}
+      
+              <div class="col-lg-4 mb-4  " style=" float:left; padding-left:50px">
+                <div class="card" style="height:385px;width: 15rem;">
+                  <img class="card-img-top" src="{{products.product_frontpage.url}}" alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title" style="text-align:center"><b>{{products.product_name}}</b></h5>
+                    <h6 class="card-title" style="text-align:center">By {{products.brand_name}}</h6>
+                    <p class="card-text" style="text-align:center">₹{{products.product_price}}</p>
+                    <!-- <small>{{book.img.url}}</small> -->
+                    
+                  </div>
+                  <div class="card-footer p-0" style="background-color: grey;">
+                   <center> <a href="{%url 'hproducts' products.id %}" class="btn btn-light btn-block" style="background-color: #1261a0;">Visit</a></center>
+                  </div>
+              </div>
+              
+            
+        
+              {% endfor %}
+
+             
+  {%endif%}
+
+  {% if ayproducts%}
+<div class="row justify-content-start">
+<center><h1>Search results: </h1></center>
+{% for  products in ayproducts %}
+      
+              <div class="col-lg-4 mb-4  " style=" float:left; padding-left:50px">
+                <div class="card" style="height:385px;width: 15rem;">
+                  <img class="card-img-top" src="{{products.product_frontpage.url}}" alt="Card image cap">
+                  <div class="card-body">
+                    <h5 class="card-title" style="text-align:center"><b>{{products.product_name}}</b></h5>
+                    <h6 class="card-title" style="text-align:center">By {{products.brand_name}}</h6>
+                    <p class="card-text" style="text-align:center">₹{{products.product_price}}</p>
+                    <!-- <small>{{book.img.url}}</small> -->
+                    
+                  </div>
+                  <div class="card-footer p-0" style="background-color: grey;">
+                   <center> <a href="{%url 'aproducts' products.id %}" class="btn btn-light btn-block" style="background-color: #1261a0;">Visit</a></center>
+                  </div>
+              </div>
+              
+            
+        
+              {% endfor %}
+
+             
+
+{% endif %}
+
+{% endblock%}
