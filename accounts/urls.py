@@ -35,15 +35,7 @@ urlpatterns = [
     path('search/', views.search,name="search"),
     path('view_order/', views.view_order,name="view_order"),
     path('asearch/', views.asearch,name="search"),
-    # path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
-    # path('product/<slug>/', ItemDetailView.as_view(), name='product'),
-    # path('add-to-cart/<slug>/', add_to_cart, name='add-to-cart'),
-    # path('add-coupon/', AddCouponView.as_view(), name='add-coupon'),
-    # path('remove-from-cart/<slug>/', remove_from_cart, name='remove-from-cart'),
-    # path('remove-item-from-cart/<slug>/', remove_single_item_from_cart,
-    #      name='remove-single-item-from-cart'),
-    # path('cart/', views.cart, name="cart"),
-    # path('', item_view.get_all_item, name="ecommpath"),
+    
 
     path('password_reset/',
          auth_views.PasswordResetView.as_view(
