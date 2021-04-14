@@ -183,18 +183,7 @@ EMAIL_HOST_PASSWORD = 'kjvbntgoyxsufmrt'
 
 DEFAULT_FROM_EMAIL = 'Aapka Pharmacy <noreply@pharmacy.com>'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
 
-# PAYTM_COMPANY_NAME = "Aapka Pharmacy"   # For representation purposes 
-# PAYTM_INDUSTRY_TYPE_ID = "Retail"     # For staging environment
-# PAYTM_CHANNEL_ID = "WEB"
-# PAYTM_MERCHANT_KEY = "!aQTOTnB3HKrOfSM"
-# PAYTM_MERCHANT_ID = "MbhxEH95252240289220"
-# PAYTM_CALLBACK_URL = "http://localhost:8000/response/" # Hardcode
-# PAYTM_WEBSITE = "WEBSTAGING"
-# PAYTM_PAYMENT_GATEWAY_URL = "https://securegw-stage.paytm.in/order/process"
-# PAYTM_TRANSACTION_STATUS_URL = "https://securegw-stage.paytm.in/order/status"
+
+
