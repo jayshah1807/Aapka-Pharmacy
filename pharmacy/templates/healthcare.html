@@ -6,42 +6,7 @@
 {% block content %}
 
 
-       <!-- <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd; margin-left: 1252px;">
-        {% if request.user.is_authenticated %}
-        <ul class="navbar-nav mr-sm-0">
-          <li class="nav-item dropdown ">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i>
-              {{user.first_name}}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <h5 style="text-align: justify;"></h5>
-              <a class="dropdown-item" href={% url 'profile' %}>My Profile</a>
-              <a class="dropdown-item" href="">View Orders</a>
-                <a class="dropdown-item" href='logout'>Logout</a>
-            </div>
-          </li>
-        </ul>
-    <button class="btn btn-outline-success me-4" type="submit" style="float: right;">
-      <i class="fa fa-gift"></i>Offers</button>
-        <a href="#" onclick="window.location.href='cart.html'"> <button class="btn btn-outline-success " type="submit" style="float: right;">
-           <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-         </button></a>
-
-
-
-        
-       {% else %}
-       <a href={% url 'login' %}><button class="btn btn-outline-success me-2" type="submit" style="float: right;" ><i class="fa fa-hand-pointer-o" aria-hidden="true"></i> Login</button></a>
-     <a href={% url 'register' %}><button class="btn btn-outline-success me-2" type="submit" style="float: right;"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign Up</button></a>
-    <a href={% url 'login' %}> <button class="btn btn-outline-success" type="submit" style="float: right;" ></a>
-       <i class="fa fa-shopping-cart" aria-hidden="true"></i></button></a>
-      {%endif%}
-
-     
-
       
-      
- </nav>  -->
  <br>
  <div class="content-crumb-div" style="padding-left: 300px;">
   <a href={% url 'home'%}><h6>Home</a>/ Healthcare Products</h6>
@@ -88,7 +53,7 @@
       
       <li class="list-inline-item abv-txt">
         <h2>{{product.name}}</h2>
-        <!-- -------------------------------------------------- #### !! ISO Alpha-3 CODES HERE !! #### -->
+     
       </li>
 
       <li class="list-inline-item">
@@ -100,29 +65,5 @@
   </a>
   
   {%endfor%}
-  <!-- <a class="btn btn-lg px-3 btn-outline-dark align-middle flg-btn" href="#" role="button" >
-    <ul class="list-inline flg-list">
-      <li class="list-inline-item abv-txt">
-        <h2>Covid Essentials</h2>
-        <!-- -------------------------------------------------- #### !! ISO Alpha-3 CODES HERE !! #### -->
-      <!-- </li>
-
-      <li class="list-inline-item">
-        <img src="https://cdn01.pharmeasy.in/dam/discovery/categoryImages/8b6738e69e243d33b3f063c31e55e4cc" class="rounded flgpic" height="60" width="120" alt="USA flag">
-      </li>
-    </ul>
-  </a> --> 
-
-<!-- <a role="button" tabindex="0" class="_3nEAy" href="/health-care/covid-essentials-109">
-    <div class="_1SVbJ">
-        <img class="_1v-TG pe-lazy" alt="Covid Essentials" src="https://cdn01.pharmeasy.in/dam/discovery/categoryImages/8b6738e69e243d33b3f063c31e55e4cc" srcset="https://cdn01.pharmeasy.in/dam/discovery/categoryImages/8b6738e69e243d33b3f063c31e55e4cc?dim=100x0&amp;dpr=1.25&amp;q=100" loading="lazy" importance="low">
-        <noscript></noscript
-            ></div>
-            <div class="_2sQc9">
-                <h2 class="mItH-">Covid Essentials</h2>
-                <div class="DRWcD">Upto 77% off</div>
-            </div>
-        </a>
-        </body>
-</html> -->
+ 
 {%endblock%}
