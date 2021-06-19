@@ -33,9 +33,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+(7e=)xmp9!u1)9^7^o@j!#+#hg6)t_9uh7=^h#b9)^3uvsn3g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','aapkapharmacy.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
+    
     'django.contrib.sites',
     'django.contrib.sessions.backends.db',
     'crispy_forms',
@@ -65,7 +66,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -182,6 +182,8 @@ EMAIL_HOST_USER = 'jayshah3600@gmail.com'
 EMAIL_HOST_PASSWORD = 'kjvbntgoyxsufmrt'
 
 DEFAULT_FROM_EMAIL = 'Aapka Pharmacy <noreply@pharmacy.com>'
+
+
 
 # PAYTM_COMPANY_NAME = "Aapka Pharmacy"   # For representation purposes 
 # PAYTM_INDUSTRY_TYPE_ID = "Retail"     # For staging environment

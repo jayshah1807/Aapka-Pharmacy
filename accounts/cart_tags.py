@@ -4,12 +4,10 @@ register = template.Library()
 
 @register.simple_tag()
 def multiply(a,b):
-    # you would need to do any localization of the result here
+    
     return int(a)*int(b)
 
-# def add(x,y):
-#     # you would need to do any localization of the result here
-#     return x+y
+
 
 @register.filter
 def cal_total_payable_amount(item):

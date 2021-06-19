@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="refresh" content="5;url = {% url 'home'%}" />
+    <title> Redirecting to Aapka Pharmacy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{%  static 'style3.css' %}" />
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <div class="loader">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <script type="text/javascript">
+        let counter = document.querySelector('loader');
+        let count = 1;
+
+        setInterval(()=>{
+            counter.innerText = count;
+            count++
+        },1000)
+
+    </script>
+  </body>
+</html>

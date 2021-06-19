@@ -7,10 +7,7 @@ class AdminDestination(admin.ModelAdmin):
 class AdminPopular(admin.ModelAdmin):
     list_display= ['name','image']
 
-# class AdminHealthCare(admin.ModelAdmin):
-#     list_display= ['name','img']
-# class AdminCategory(admin.ModelAdmin):
-#     list_display= ['name']
+
 class AdminProduct(admin.ModelAdmin):
     list_display= ['name','image']
 

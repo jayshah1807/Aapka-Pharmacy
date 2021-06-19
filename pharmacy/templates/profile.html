@@ -10,7 +10,7 @@
     <br>
     <div class="row">
         <div class="col-md-8">
-
+            
 <div class="content-section mt-3">
     <div class="media">
         <img class="rounded-circle account-img" src="{{ user.profile.profile_image.url }}">
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <form method="POST" enctype="multipart/form-data" action="profile">
+    <form method="POST" enctype="multipart/form-data" action="">
         {% csrf_token %}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Your Profile</legend>

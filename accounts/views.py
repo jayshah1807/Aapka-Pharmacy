@@ -8,13 +8,7 @@ from . forms import UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy,reverse
-import json
-from django.shortcuts import  get_object_or_404
-from django.utils import timezone
-from django.views.generic import DetailView, View
-from django.contrib.auth.mixins import LoginRequiredMixin
 from decimal import Decimal as D
-from django.db.models import Max
 from paytm import Checksum
 from django.views.decorators.csrf import csrf_exempt
 from accounts.utils import VerifyPaytmResponse
@@ -23,16 +17,18 @@ from django.http import HttpResponse
 MERCHANT_KEY = 'Edbv!fo3jre2Y01R'
 
 res = {}
+# Loading Page of the Website
+def loader(request):
+    return render(request,'loader.html')
+
+#Home Page 
 def home(request):
     dest = Destination.get_all_item()
     pops = popular.get_all_item()
     context = {'dest': dest, 'pops': pops}
     return render(request, 'home.html',context)
 
-    # pops = popular.get_all_item()
-    # return render(request, 'home.html',{'pops': pops})
-
-    
+#Store the photos of the Product
 def healthcare(request):
     products = product.objects.all()
     return render(request, 'healthcare.html',{'products':products})
@@ -42,7 +38,7 @@ def ayush(request):
     return render(request, 'ayush.html',{'products':products})
 
 
-
+#Login page
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
@@ -58,7 +54,7 @@ def login(request):
                 print("uid:",request.session["uid"])
                 auth.login(request,user)
 
-                return redirect('/')
+                return redirect('home')
             else:
                 messages.info(request, "Invalid Username or Password")
                 return redirect('login')
@@ -72,7 +68,7 @@ def login(request):
     
 
     
-
+#SignUp Page
 def register(request):
 
     if request.method == 'POST':
@@ -101,11 +97,12 @@ def register(request):
         return render(request, 'register.html')
 
 
-
+#Logout page
 def logout(request):
     auth.logout(request)
-    return redirect('/')
+    return redirect('home')
 
+#Update Profile Page
 @login_required
 def profile(request):
     if request.method == 'POST':
@@ -115,8 +112,8 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, 'Your profile updated successfully!!')
-            return redirect('profile')
+            
+            return redirect('home')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -127,6 +124,7 @@ def profile(request):
         }
     return render(request, 'profile.html', context)
 
+#Search for the Healthcare Product
 def get_all_items1(request):
     product_list = []
     products1 = []
@@ -162,6 +160,7 @@ def get_all_items1(request):
     context = {'products1': product_list}
     return render(request, "productspage.html", context)
 
+#Product Description Page where user can watch the product details and review
 def productview(request, product_id):
     products2 = Item.objects.filter(id=product_id,type_of_item="Healthcare")
     product = Item.objects.get(id=product_id , type_of_item="Healthcare")
@@ -179,6 +178,7 @@ def productview(request, product_id):
     print(products2)
     return render(request, "products.html", context)
 
+#Search for the Ayurvedic Product
 def get_all_aitems(request):
     product_alist = []
     ayproducts = []
@@ -235,6 +235,7 @@ def get_all_aitems(request):
     context = {'ayproducts': product_alist}
     return render(request, "ayush.html", context)
 
+#Product Description Page where user can watch the product details and review
 def aproductview(request, product_id):
     aproducts = Item.objects.filter(id=product_id,type_of_item = "Ayurvedic")
     product = Item.objects.get(id=product_id , type_of_item="Ayurvedic")
@@ -253,6 +254,7 @@ def aproductview(request, product_id):
     print(aproducts)
     return render(request, "aproducts.html", context)
 
+#Search for the Homeopathic Product
 def get_all_hitems(request):
     product_hlist = []
     hoproducts = []
@@ -315,6 +317,7 @@ def get_all_hitems(request):
     context = {'hoproducts': product_hlist}
     return render(request, "homeo.html", context)
 
+#Product Description Page where user can watch the product details and review
 def hproductview(request, product_id):
     hproducts = Item.objects.filter(id=product_id,type_of_item = "Homeopathy")
     product = Item.objects.get(id=product_id , type_of_item="Homeopathy")
@@ -333,15 +336,17 @@ def hproductview(request, product_id):
     print(hproducts)
     return render(request, "hproduct.html", context)
 
-
+#For searching products from textbox given in Navbar
 def search(request):
     if request.method == 'GET':
 
         search=request.GET.get('search')
-        products1=Item.objects.filter(product_name=search) 
+        bsearch=request.GET.get('search')
+        products1=Item.objects.filter(product_name=search, brand_name=bsearch) 
+        print(products1)
         params={'products1':products1}
         
-        return render(request, 'search.html', params)
+    return render(request, 'search.html', params)
 
 def asearch(request):
     if request.method == 'GET':
@@ -353,6 +358,7 @@ def asearch(request):
         
         return render(request, 'search.html', params)
 
+#Cart Functionality
 def cart(request):
     user = int(request.session['uid'])
     cart = Carts.objects.filter(user = user)
@@ -367,7 +373,7 @@ def cart(request):
     context={'item':items}
     return render(request, 'cart.html',context)
 
-
+# Add product to cart functionality for Healthcare Product
 @login_required()
 def add_to_cart(request, product_id):
     user = int(request.session["uid"])
@@ -380,14 +386,18 @@ def add_to_cart(request, product_id):
             c.quantity += 1
             c.save()
             print(cart)
+            messages.success(request,"Successfully updated quantity to cart")
     else:
         c = Carts()
         c.product_id = product_id
         c.user_id = user
         c.save()
+        messages.success(request,"Successfully added to cart")
+    
     context = {'productdata' : products2[0]}
     return render(request,"products.html", context)
 
+# Add product to cart functionality for Healthcare Product
 @login_required()
 def addTocart(request, product_id):
     user = int(request.session["uid"])
@@ -400,14 +410,17 @@ def addTocart(request, product_id):
             c.quantity += 1
             c.save()
             print(cart)
+            messages.success(request,"Successfully updated quantity to cart")
     else:
         c = Carts()
         c.product_id = product_id
         c.user_id = user
         c.save()
+        messages.success(request,"Successfully added to cart")
     context = {'aproduct' : aproducts[0]}
     return render(request,"aproducts.html",context)
 
+# Add product to cart functionality for Healthcare Product
 @login_required()
 def addtocart(request, product_id):
     user = int(request.session["uid"])
@@ -420,15 +433,17 @@ def addtocart(request, product_id):
             c.quantity += 1
             c.save()
             print(cart)
+            messages.success(request,"Successfully updated quantity to cart")
     else:
         c = Carts()
         c.product_id = product_id
         c.user_id = user
         c.save()
+        messages.success(request,"Successfully added to cart")
     context = {'hproduct' : hproducts[0]}
     return render(request,"hproduct.html",context)
 
-
+#Checkout Page
 def checkout(request,total):
     # dest = Destination.get_all_item()
     
@@ -454,8 +469,7 @@ def checkout(request,total):
         request.session['oid'] = str(order.order_id)
         request.session.set_expiry(3000)
         id = order.order_id
-        # return render(request, 'checkout.html', {'thank':thank, 'id':id})
-        #request paytm to transfer the amount to your account after payment by user
+       
         param_dict={
 
                 'MID': 'CokjuX79375453320495',
@@ -487,56 +501,8 @@ def checkout(request,total):
 
     return render(request, 'checkout.html',context)
 
-# def payment(request):
-#     if request.method=="POST":
-#         items_json = request.POST.get('itemsJson', '')
-#         name = request.POST.get('name', '')
-#         amount = request.POST.get('amount', '')
-#         email = request.POST.get('email', '')
-#         address = request.POST.get('address1', '') + " " + request.POST.get('address2', '')
-#         city = request.POST.get('city', '')
-#         state = request.POST.get('state', '')
-#         zip_code = request.POST.get('zip_code', '')
-#         phone = request.POST.get('phone', '')
 
-#         order = Orders(items_json= items_json, name=name, email=email, address= address, city=city, state=state, zip_code=zip_code, phone=phone, amount=amount)
-#         order.save()
-#         update = OrderUpdate(order_id=order.order_id, update_desc="The order has been placed")
-#         update.save()
-
-#         thank=True
-#         id = order.order_id
-#         # return render(request, 'checkout.html', {'thank':thank, 'id':id})
-#         #request paytm to transfer the amount to your account after payment by user
-#         param_dict={
-
-#                 'MID': 'jIxOuT44108029771814',
-#                 'ORDER_ID': str(order.order_id),
-#                 'TXN_AMOUNT': amount,
-#                 'CUST_ID': email,
-#                 'INDUSTRY_TYPE_ID': 'Retail',
-#                 'WEBSITE': 'WEBSTAGING',
-#                 'CHANNEL_ID': 'WEB',
-#                 'CALLBACK_URL':'http://127.0.0.1:8080/handlerequest/',
-
-#         }
-#         param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
-#         return  render(request, 'paytm.html', {'param_dict': param_dict})
-        
-#     return render(request, 'checkout.html')
-
-
-# @csrf_exempt
-# def response(request):
-#     resp = VerifyPaytmResponse(request)
-#     if resp['verified']:
-#         # save success details to db; details in resp['paytm']
-#         return HttpResponse("<center><h1>Transaction Successful</h1><center>", status=200)
-#     else:
-#         # check what happened; details in resp['paytm']
-#         return HttpResponse("<center><h1>Transaction Failed</h1><center>", status=400)
-
-
+#Handle Request for Paytm Gateway
 @csrf_exempt
 def handlerequest(request):
     uid = request.user.id
@@ -559,6 +525,7 @@ def handlerequest(request):
             print('order was not successful because' + response_dict['RESPMSG'])
     return render(request, 'paymentstatus.html', {'response': response_dict})
 
+# If payment done is successful
 def success(request):
     global res
     print(res)
@@ -581,6 +548,7 @@ def success(request):
         o.save()
     return render(request, 'paymentstatus.html', {'response':res})
 
+#Increment the product quantity
 def increment(request,product_id):
     uid = request.session['uid']
     cart = Carts.objects.filter(user_id=uid,product_id = product_id)
@@ -592,9 +560,10 @@ def increment(request,product_id):
                 c.quantity += 1
                 c.save()
             else:
-                messages.error(request,"Can't add further items")
+                messages.error(request,"Can't increment item, Out of Stock!")
     return redirect('/cart/')
 
+#Decrement the product quantity
 def decrement(request,product_id):
     uid = request.session['uid']
     cart = Carts.objects.filter(user_id=uid,product_id = product_id)
@@ -607,6 +576,7 @@ def decrement(request,product_id):
             c.save()
     return redirect('/cart/')
 
+#For Promocode
 def promocode(request,total):
     pcode = request.POST['code']
     print(pcode)
@@ -620,7 +590,7 @@ def promocode(request,total):
     print(total)
     return redirect('/checkout/'+str(total)+'/')
 
-
+# To view orders after payment get successful
 def view_order(request):
     user = int(request.session['uid'])
     cart = Carts.objects.filter(user = user)
@@ -647,392 +617,3 @@ def view_order(request):
 
 
 
-# def add_to_cart(request, product_id):
-
-#     user = None
-#     if request.user.is_authenticated:
-#         user = request.user
-
-#     cart = request.session.get('cart')
-
-#     if cart is None:
-#         cart = []
-
-#     Items = Item.objects.get(id=product_id)
-    
-
-#     flag = True
-#     for cart_obj in cart:
-#         product_id = cart_obj.get('Item')
-        
-#         if product_id == product.id:
-#             flag = False
-#             cart_obj['quantity'] = cart_obj['quantity'] + 1
-#     if flag:
-#         cart_obj = {
-#             'Item': product.id,
-#             'quantity': 1
-            
-#         }
-#         cart.append(cart_obj)
-
-#     if user is not None:
-#         existing = Carts.objects.filter(product=product_id, user=user)
-#         if len(existing) > 0:
-#             obj = existing[0]
-
-#             obj.quantity = obj.quantity+1
-#             obj.save()
-
-#         else:
-#             c = Carts()
-#             c.product = Items
-#             c.user = user
-#             c.quantity = 1
-#             c.save()
-
-#     request.session['cart'] = cart
-#     return_url = request.GET.get('return_url')
-#     cart = request.session.get('cart')
-#     print(cart)
-#     return redirect(return_url)
-    # uid = request.session['uid']
-    # cart = CartItem.objects.raw("Select * from accounts_cartitem where user_id =" +str(uid)+ " && product_id ="+str(product_id)+";" )
-    # if len(list(cart)) != 0:
-    #     cart.quantity += 1
-    #     carts = Carts.objects.filter(Q(user=request.session["uid"]) & Q(Items=product_id))
-    # else:
-    #     newCartItem = CartItem()
-    #     newCartItem.user_id = request.session["uid"]
-    #     newCartItem.product_id = product_id
-    #     newCartItem.save()
-    #     newCart  = Carts()
-    #     # s = list(newCartItem)
-
-        
-    #     newCart.user_id = request.session["uid"]
-    #     newCart.Items.add(newCartItem)
-    #     newCart.save()
-    # products2 = Item.objects.filter(id=product_id)
-    # context = {'productdata' : products2[0]}
-    # print(products2)
-    # return render(request, "products.html", context)
-    # for cart_obj in cart:
-    #     product_id = cart_obj.get('Item')
-    #     if product_id == product.id:
-    # #         flag = False
-    #         cart_obj['quantity'] = cart_obj['quantity'] + 1
-    # existing = CartItem.objects.filter(product=product, id=user.id)
-    # if len(existing) > 0:
-    #     obj = existing[0]
-
-    #     obj.quantity = obj.quantity+1
-    #     obj.save()
-    # # create order associated with thproduct = Item.objects.get(id=product_id)
-    # # check if the user already owns this product
-    # # if product in request.user.profile.products.all():
-    #     # messages.info(request, 'You already own this ebook')
-    #     # return redirect(reverse('products')) 
-    # # create orderItem of the selected product
-    # cart = request.session.get('cart')
-    # order_item = CartItem.objects.get_or_create(product=product)
-    # user_order= Carts.objects.get_or_create(user=request.user,ordered=False)
-    # user_order.product.add(order_item)
-    # messages.info(request, "Item added to cart")
-    
-    # flag = True
-    # for cart_obj in cart:
-    #     product_id = cart_obj.get('Item')
-    #     # cat_temp = cart_obj.get('category')
-    #     if product_id == product.id:
-    #         flag = False
-    #         cart_obj['quantity'] = cart_obj['quantity'] + 1
-    # if flag:
-    #     cart_obj = {
-    #         'Item': product.id,
-    #         'quantity': 1
-    #         # 'category': category
-    #     }
-    #     cart.append(cart_obj)
-    # if len(existing) > 0:
-    #     obj = existing[0]
-
-    #     obj.quantity = obj.quantity+1
-    #     obj.save()
-
-    # else:
-    #     c = CartItem()
-    #     c.user = user
-    #     c.product = product
-    #         # c.Category = cat_temp
-    #     c.quantity = 1
-    #         # c.save()
-    # # if status:
-    # #     # generate a reference code
-    # #     user_order.ref_code = generate_order_id()
-    # #     user_order.save()
-
-    # # show confirmation message and redirect back to the same page
-    # messages.info(request, "Item added to cart")
-    # user = None
-    # if request.user.is_authenticated:
-    #     user = request.user
-
-    # cart = request.session.get('cart')
-    # # cart = Cart.objects.filter(user__id = request.user.id)
-    # if cart is None:
-    #     cart = []
-
-    # Items = Item.objects.get(id=product_id)
-    # cat_temp = Category.objects.get(name=category)
-
-    # flag = True
-    # for cart_obj in cart:
-    #     product_id = cart_obj.get('Item')
-    #     # cat_temp = cart_obj.get('category')
-    #     if product_id == product.id:
-    #         flag = False
-    #         cart_obj['quantity'] = cart_obj['quantity'] + 1
-    # if flag:
-    #     cart_obj = {
-    #         'Item': product.id,
-    #         'quantity': 1
-    #         # 'category': category
-    #     }
-    #     cart.append(cart_obj)
-
-    # if user is not None:
-    #     existing = CartItem.objects.filter(product=product, id=user.id)
-    #     if len(existing) > 0:
-    #         obj = existing[0]
-
-    #         obj.quantity = obj.quantity+1
-    #         obj.save()
-
-    #     else:
-    #         c = CartItem()
-    #         c.user = user
-    #         c.product = product
-    #         # c.Category = cat_temp
-    #         c.quantity = 1
-    #         # c.save()
-
-    # request.session['cart'] = cart
-    # return_url = request.GET.get('return_url')
-    # cart = request.session.get('cart')
-    # print(cart)
-    # return redirect(return_url)
-
-
-
-
-
-# def addcomment(request, product_id):
-#     if request.user.is_authenticated:
-#         product = Item.objects.get(id=product_id)
-#         if request.method == 'POST':
-#             form = CommentForm(request.POST)
-#             if form.is_valid():
-#                 data = form.save(commit=False)
-#                 data.comment = comment
-#                 data.subject = subject
-#                 data.rate = rate
-#                 data.user = user
-#                 data.product = product
-#                 data.save()
-#                 return HttpResponseRedirect(reverse('addcomment', args=[product_id]))
-#         else:
-#             form = CommentForm()
-#         template = loader.get_template('products.html')
-#         context = {
-#             'form': form,
-#             'product': product
-#         }
-#         return HttpResponse(template.render(context,request))
-    
-        
-    # if request.method == 'POST':
-    #     form = CommentForm(request.POST)
-    #     if form.is_valid():
-    #         data = Comment()
-    #         # data.name = form.cleaned_data['name']
-    #         data.subject = form.cleaned_data['subject']
-    #         data.comment = form.cleaned_data['comment']
-    #         data.ip = request.Meta.get('REMOTE_ADDR')
-    #         data.product_id = id
-    #         current_user = request.user
-    #         data.user__id = current_user.id
-    #         data.save()
-    #         messages.success(request, "Your review has been sent, Thank you for your Interest")
-    #         return HttpResponseRedirect(url)
-    # return HttpResponseRedirect(url)
-
-
-
-# @login_required()
-# def order_details(request, **kwargs):
-#     existing_order = get_user_pending_order(request)
-#     context = {
-#         'order': existing_order
-#     }
-#     return render(request, 'cart.html', context)
-
-# def add_to_cart(request, product_id):
-
-#     user = None
-#     if request.user.is_authenticated:
-#         user = request.user
-
-#     cart = request.session.get('cart')
-#     # cart = Cart.objects.filter(user__id = request.user.id)
-#     if cart is None:
-#         cart = []
-
-#     Items = Item.objects.get(id=product_id)
-#     # cat_temp = Category.objects.get(name=category)
-
-#     flag = True
-#     for cart_obj in cart:
-#         product_id = cart_obj.get('Item')
-#         # cat_temp = cart_obj.get('category')
-#         if product_id == Items.id:
-#             flag = False
-#             cart_obj['quantity'] = cart_obj['quantity'] + 1
-#     if flag:
-#         cart_obj = {
-#             'Item': Items.id,
-#             'quantity': 1
-#             # 'category': category
-#         }
-#         cart.append(cart_obj)
-
-#     if user is not None:
-#         existing = Cart.objects.filter(Items=Items, user=user)
-#         if len(existing) > 0:
-#             obj = existing[0]
-
-#             obj.quantity = obj.quantity+1
-#             obj.save()
-
-#         else:
-#             c = Cart()
-#             c.user = user
-#             c.Items = Items
-#             # c.Category = cat_temp
-#             c.quantity = 1
-#             c.save()
-
-#     request.session['cart'] = cart
-#     return_url = request.GET.get('return_url')
-#     cart = request.session.get('cart')
-#     print(cart)
-#     return redirect(return_url)
-
-# class OrderSummaryView(LoginRequiredMixin, View):
-#     def get(self, *args, **kwargs):
-#         try:
-#             order = Order.objects.get(user=self.request.user, ordered=False)
-#             context = {
-#                 'object': order
-#             }
-#             return render(self.request, 'order_summary.html', context)
-#         except ObjectDoesNotExist:
-#             messages.warning(self.request, "You do not have an active order")
-#             return redirect("/")
-
-
-# class ItemDetailView(DetailView):
-#     model = Item
-#     template_name = "products.html"
-
-
-
-# @login_required
-# def add_to_cart(request, slug):
-#     item = get_object_or_404(Item, slug=slug)
-#     order_item, created = cart.objects.get_or_create(
-#         item=item,
-#         user=request.user,
-#         ordered=False
-#     )
-#     order_qs = Order.objects.filter(user=request.user, ordered=False)
-#     if order_qs.exists():
-#         order = order_qs[0]
-#         # check if the order item is in the order
-#         if order.items.filter(item__slug=item.slug).exists():
-#             order_item.quantity += 1
-#             order_item.save()
-#             messages.info(request, "This item quantity was updated.")
-#             return redirect("core:order-summary")
-#         else:
-#             order.items.add(order_item)
-#             messages.info(request, "This item was added to your cart.")
-#             return redirect("core:order-summary")
-#     else:
-#         ordered_date = timezone.now()
-#         order = Order.objects.create(
-#             user=request.user, ordered_date=ordered_date)
-#         order.items.add(order_item)
-#         messages.info(request, "This item was added to your cart.")
-#         return redirect("core:order-summary")
-
-
-# @login_required
-# def remove_from_cart(request, slug):
-#     item = get_object_or_404(Item, slug=slug)
-#     order_qs = Order.objects.filter(
-#         user=request.user,
-#         ordered=False
-#     )
-#     if order_qs.exists():
-#         order = order_qs[0]
-#         # check if the order item is in the order
-#         if order.items.filter(item__slug=item.slug).exists():
-#             order_item = cart.objects.filter(
-#                 item=item,
-#                 user=request.user,
-#                 ordered=False
-#             )[0]
-#             order.items.remove(order_item)
-#             order_item.delete()
-#             messages.info(request, "This item was removed from your cart.")
-#             return redirect("core:order-summary")
-#         else:
-#             messages.info(request, "This item was not in your cart")
-#             return redirect("core:product", slug=slug)
-#     else:
-#         messages.info(request, "You do not have an active order")
-#         return redirect("core:product", slug=slug)
-
-
-# @login_required
-# def remove_single_item_from_cart(request, slug):
-#     item = get_object_or_404(Item, slug=slug)
-#     order_qs = Order.objects.filter(
-#         user=request.user,
-#         ordered=False
-#     )
-#     if order_qs.exists():
-#         order = order_qs[0]
-#         # check if the order item is in the order
-#         if order.items.filter(item__slug=item.slug).exists():
-#             order_item = cart.objects.filter(
-#                 item=item,
-#                 user=request.user,
-#                 ordered=False
-#             )[0]
-#             if order_item.quantity > 1:
-#                 order_item.quantity -= 1
-#                 order_item.save()
-#             else:
-#                 order.items.remove(order_item)
-#             messages.info(request, "This item quantity was updated.")
-#             return redirect("core:order-summary")
-#         else:
-#             messages.info(request, "This item was not in your cart")
-#             return redirect("core:product", slug=slug)
-#     else:
-#         messages.info(request, "You do not have an active order")
-#         return redirect("core:product", slug=slug)
-
-    
